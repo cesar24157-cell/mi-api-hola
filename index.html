@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>API Postgres</title></head>
+<body>
+    <h1 id="display" style="text-align:center; margin-top:100px;">Cargando...</h1>
+
+    <script>
+        fetch('http://localhost:3000/mensaje')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('display').innerText = data.texto;
+            })
+            .catch(() => document.getElementById('display').innerText = "Error de conexión");
+    </script>
+</body>
+</html>
