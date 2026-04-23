@@ -1,25 +1,32 @@
 const express = require('express');
 const { Pool } = require('pg');
-const cors = require('cors');
+const cors = require('cors'); // <--- AGREGADO
 
 const app = express();
-app.use(cors());
+app.use(cors()); // <--- AGREGADO (Debe ir antes de las rutas)
 
-// Render nos dará una "Internal Database URL"
+// Configuración de la conexión a Render Cloud
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false } // Obligatorio para conexiones seguras en la nube
+  // Tu enlace de Render
+  connectionString: 'postgresql://db_holamundo_5jjo_user:lBZKoCp8h6c6vHnZKsrnKmmbxKgQ0Fxi@dpg-d7l9ntosfn5c73cptsjg-a.oregon-postgres.render.com/db_holamundo_5jjo',
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
-app.get('/datos', async (req, res) => {
+// Ruta para obtener los mensajes de la nueva tabla
+app.get('/mensajes-cloud', async (req, res) => {
     try {
-        const query = await pool.query('SELECT texto FROM mensaje_final');
-        res.json(query.rows[0]);
+        const result = await pool.query('SELECT * FROM mensajes_cloud');
+        res.json(result.rows);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(err.message);
+        res.status(500).send("Error conectando al servidor Cloud");
     }
 });
 
-// El puerto lo decide Render automáticamente
+// Definir el puerto (importante para Render)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Servidor Cloud corriendo en el puerto ${PORT}`);
+});
