@@ -5,7 +5,7 @@
     <h1 id="display" style="text-align:center; margin-top:100px;">Cargando...</h1>
 
     <script>
-        fetch('http://localhost:3000/mensaje')
+        fetch('https://api-hola-mundo.onrender.com/datos')
             .then(res => res.json())
             .then(data => {
                 document.getElementById('display').innerText = data.texto;
