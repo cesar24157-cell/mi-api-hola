@@ -1,26 +1,26 @@
 const express = require('express');
-const cors = require('cors'); // 1. Importamos cors
+const cors = require('cors'); 
 const app = express();
 
-// 2. Habilitamos CORS para que tu index.html no sea bloqueado
+// Habilitamos CORS para que tu index.html pueda leer los datos
 app.use(cors());
 
+// Ruta principal
 app.get('/', (req, res) => {
-    res.send('¡Servidor funcionando! Intenta ir a /datos para ver el resto.');
+    res.send('¡Servidor arreglado finalmente!');
 });
 
+// Ruta de datos para tu fetch
 app.get('/datos', (req, res) => {
-    // 3. Cambié 'mensaje' por 'texto' para que tu HTML lo encuentre
     res.json({
         texto: "¡Hola! Estos son los datos desde el servidor",
         status: "success"
     });
 });
 
-// Render usa puertos dinámicos, por eso process.env.PORT
+// Configuración del puerto para Render
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
+
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor escuchando en puerto ${PORT}`);
 });
-
-res.send('¡Servidor arreglado finalmente!');
