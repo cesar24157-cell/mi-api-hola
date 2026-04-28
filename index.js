@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
@@ -6,38 +5,35 @@ const app = express();
 
 app.use(cors());
 
-// Configuración de la base de datos
+// Conexión directa con tu URL de PostgreSQL
 const pool = new Pool({
   connectionString: 'postgresql://db_holamundo_5jjo_user:lBZKoCp8h6c6vHnZKsrnKmmbxKgQ0Fxi@dpg-d7l9ntosfn5c73cptsjg-a.oregon-postgres.render.com/db_holamundo_5jjo',
   ssl: { rejectUnauthorized: false }
 });
 
 app.get('/', (req, res) => {
-    res.send('Servidor funcionando. Ve a /datos para ver pgAdmin.');
+    res.send('API Conectada. Ve a /datos');
 });
 
-// Esta ruta ahora consulta tu tabla "mensaje_final"
+// Ruta que devuelve SOLO el "Hola Mundo:)" de la base de datos
 app.get('/datos', async (req, res) => {
     try {
-        // Consultamos la tabla que vi en tu captura de pgAdmin
-        const resultado = await pool.query('SELECT texto FROM mensaje_final');
+        const resultado = await pool.query('SELECT texto FROM mensaje_final LIMIT 1');
         
-        // Si hay datos, mandamos el primero. Si no, un mensaje de error.
         if (resultado.rows.length > 0) {
+            // Esto envía solo {"texto": "Hola Mundo:)"}
             res.json({
-                texto: resultado.rows[0].texto, // Esto mostrará "Hola Mundo:)"
-                status: "success"
+                texto: resultado.rows[0].texto
             });
         } else {
-            res.json({ texto: "No hay datos en la tabla todavía", status: "empty" });
+            res.json({ texto: "Tabla vacía" });
         }
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Error al leer pgAdmin" });
+        res.status(500).json({ error: "Error de conexión" });
     }
 });
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor escuchando en puerto ${PORT}`);
+    console.log(`Servidor listo`);
 });
