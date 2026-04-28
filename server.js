@@ -30,3 +30,21 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor Cloud corriendo en el puerto ${PORT}`);
 });
+
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+
+// ESTA ES LA PARTE QUE TE FALTA
+app.get('/datos', (req, res) => {
+    res.send("¡Hola! El servidor ahora sí reconoce esta ruta.");
+});
+
+// Ruta principal (opcional, para que no salga error al inicio)
+app.get('/', (req, res) => {
+    res.send("Servidor funcionando correctamente");
+});
+
+app.listen(port, () => {
+    console.log(`Servidor corriendo en el puerto ${port}`);
+});
