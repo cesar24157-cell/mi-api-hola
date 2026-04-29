@@ -37,3 +37,10 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor listo`);
 });
+
+const cors = require('cors');
+const express = require('express');
+const app = express();
+
+// Esto le dice a la API: "Acepta peticiones de cualquier sitio"
+app.use(cors());
